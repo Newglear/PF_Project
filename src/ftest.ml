@@ -34,7 +34,7 @@ let () =
   let graph4 = add_arc graph3 4 2 10 in
   let graph5 = gmap graph4 (fun x -> string_of_int x) in
 
-  let () = write_file outfile graph5 in
-
+  let () = write_file outfile graph in
+  let () = export graph5 "graphs/test" in  
   ()
 

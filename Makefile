@@ -14,6 +14,11 @@ demo: build
 	./ftest.native graphs/graph1 1 2 outfile
 	@echo "\n==== RESULT ==== (content of outfile) \n"
 	@cat outfile
+	dot -Tsvg graphs/dotgraphoutputgwencador > graphs/dotgraphoutputgwencador.svg
+
+# dot: build
+# 	dot -Tsvg graphs/dotgraphoutputgwencador > graphs/dotgraphoutputgwencador.svg
+	
 
 clean:
 	-rm -rf _build/

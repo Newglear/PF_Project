@@ -99,3 +99,21 @@ let from_file path =
   close_in infile ;
   final_graph
 
+(* fontname='Helvetica,Arial,sans-serif'\n
+   node [fontname='Helvetica,Arial,sans-serif']\n
+   edge [fontname='Helvetica,Arial,sans-serif']\n *)
+
+let export gr path=
+  let soi = string_of_int in
+  let f acu id1 id2 a = acu^("\t"^(soi id1)^" -> "^(soi id2)^"[label = "^(a)^"];\n") in
+  let initdotgraph = "digraph finite_state_machine {\n
+    rankdir=LR;\n
+    node [shape = circle];\n" in
+
+  let dotgraph = initdotgraph ^ (e_fold gr f "") ^ "}"in
+
+  let ff = open_out path in
+  fprintf ff "%s" dotgraph;
+  close_out ff 
+
+
