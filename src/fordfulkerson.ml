@@ -64,3 +64,13 @@ let min path  =
     | [] -> a
   in 
   loop path 10000000
+
+  let add_path graph s path val =
+    match path with 
+    | (id,_)::rest ->add path id ( add_arc graph s id val ) rest val 
+    | [] -> graph
+  in 
+
+  
+  
+
