@@ -1,5 +1,6 @@
 open Gfile
 open Tools
+open Fordfulkerson
 
 let () =
 
@@ -31,10 +32,17 @@ let () =
   (* let () = write_file outfile graph2 in *)
 
   let graph3 = gmap graph (fun x -> int_of_string x) in
-  let graph4 = add_arc graph3 4 2 10 in
-  let graph5 = gmap graph4 (fun x -> string_of_int x) in
+  (* let graph4 = add_arc graph3 4 2 10 in
+     let graph5 = gmap graph4 (fun x -> string_of_int x) in *)
+
+  let graph6 = init_graph graph3 in
+  let graph7 = create_flowgraph graph6 in
+  let graph = init_tree graph7 0 in 
+  let path =match(find_path graph 0 5) with Some x -> x | None -> [] in 
+  let () = List.iter (fun (a,b) -> Printf.printf "(%d,%d)" a b) (path) in
+  let graph = gmap graph (fun x -> string_of_int x) in
 
   let () = write_file outfile graph in
-  let () = export graph5 "graphs/test" in  
+  let () = export graph "graphs/dotgraphoutputgwencador" in  
   ()
 
