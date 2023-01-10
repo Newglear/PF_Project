@@ -19,20 +19,22 @@ open Gfile
 
 type flot_arc = (int*int)
 
+(*init the graph with a tuple --> 0 and his label==flotmax*)
 let init_graph gr= gmap gr (fun x -> (0,x))
 
+(*transform a graph into a flowgraph*)
 let create_flowgraph gr = 
   let g1 = e_fold gr (fun g id1 id2 (x,y) -> if x<>0 then add_arc g id2 id1 x else g) (clone_nodes gr) in
 
   e_fold gr (fun g id1 id2 (x,y) -> if (y-x)<>0 then add_arc g id1 id2 (y-x) else g) g1 
 
-
+let filter_zeros gr = e_fold gr (fun g id1 id2 (x) -> if x<>0 then add_arc g id1 id2 x else g) (clone_nodes gr)
+(*create a tree with a flowgraph*)
 let init_tree gr s=
 
   (* let add_child s_node l_arc g_acu = List.fold_left (fun g (x,y) -> if node_exists g x then g else new_arc (new_node g x) s_node x y) g_acu l_arc in *)
 
   let add_child s_node (x,y) g = if node_exists g x then g else new_arc (new_node g x) s_node x y in
-
 
   let rec loop source g_acu =
     let l_outarc = out_arcs gr source in
@@ -43,7 +45,7 @@ let init_tree gr s=
   loop s (new_node empty_graph s)
 
 
-
+(*find a path from source to destination in the tree*)
 let find_path gr source puit =
 
   let rec loop source puit l_acu =
@@ -55,7 +57,7 @@ let find_path gr source puit =
     )
   in
 
-  loop source puit [(source,0)]
+  (loop source puit [(source,1000000000)])
 
 let min path  = 
   let rec loop path a=
@@ -65,12 +67,14 @@ let min path  =
   in 
   loop path 10000000
 
-  let add_path graph s path val =
-    match path with 
-    | (id,_)::rest ->add path id ( add_arc graph s id val ) rest val 
-    | [] -> graph
-  in 
+let rec add_flow graph s path value =
+  match path with 
+  | (sid,_)::rest when sid = s-> add_flow graph s rest value
+  | (id,_)::rest ->( let gr = add_arc graph id s value in 
+                     add_flow ( add_arc gr s id (-value)) id rest value )
+  | [] -> graph
 
-  
-  
+
+
+
 

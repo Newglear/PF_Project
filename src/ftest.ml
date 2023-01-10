@@ -36,13 +36,21 @@ let () =
      let graph5 = gmap graph4 (fun x -> string_of_int x) in *)
 
   let graph6 = init_graph graph3 in
-  let graph7 = create_flowgraph graph6 in
-  let graph = init_tree graph7 0 in 
-  let path =match(find_path graph 0 5) with Some x -> x | None -> [] in 
+  let flow_graph = create_flowgraph graph6 in
+  let tree = init_tree flow_graph 0 in 
+  let path =match(find_path tree 0 5) with Some x -> x | None -> [] in
+  let path  = List.rev path in 
+  Printf.printf "%d" (min path); 
   let () = List.iter (fun (a,b) -> Printf.printf "(%d,%d)" a b) (path) in
-  let graph = gmap graph (fun x -> string_of_int x) in
+  let flow_graph = add_flow flow_graph 0 path (min path) in 
 
-  let () = write_file outfile graph in
-  let () = export graph "graphs/dotgraphoutputgwencador" in  
+  let flow_graph = filter_zeros flow_graph in 
+  let graph = init_tree flow_graph 0 in
+  (* let path = match(find_path graph 0 5) with Some x -> x | None -> [] in 
+     let graph = add_flow graph 0 path (min path) in *)
+
+  (* let graph = gmap graph (fun x -> string_of_int x) in
+     let () = write_file outfile graph in
+     let () = export graph "graphs/dotgraphoutputgwencador" in   *)
   ()
 
