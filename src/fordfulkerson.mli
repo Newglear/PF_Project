@@ -12,7 +12,7 @@ val filter_zeros : int Graph.graph -> int Graph.graph
 
 val init_tree : 'a Graph.graph -> Graph.id -> 'a Graph.graph
 
-val find_path : int Graph.graph -> Graph.id -> Graph.id -> (Graph.id * int) list option
+val find_path : int Graph.graph -> Graph.id -> Graph.id -> (Graph.id * int) list
 
 val min : ('a * int) list -> int
 
