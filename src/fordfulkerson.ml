@@ -2,43 +2,15 @@ open Tools
 open Graph
 open Gfile 
 
-(*
-1 -> définir source et puit
-2 -> mettre les arcs à 0 par rapport à leur flot max
-2bis -> transformer le graph en double sens
-3 -> faire un BFS entre source et puit et recupérer le path
--> ajouter les enfants de la source dans la Q
--> pop l'enfant puis 
--> 
-
-4 -> incrémenter du flot min des max les arcs du chemin
-5 -> recommencer jusqu'à ce qu'il n'y ait plus de solution
-6 -> export le graph
-*)
-
 
 type flot_arc = (int*int)
-
-(*init the graph with a tuple --> 0 and his label==flotmax*)
-let init_graph gr= gmap gr (fun x -> (0,x))
-
-(*transform a graph into a flowgraph*)
-let create_flowgraph gr = 
-  let g1 = e_fold gr (fun g id1 id2 (x,y) -> if x<>0 then add_arc g id2 id1 x else g) (clone_nodes gr) in
-
-  e_fold gr (fun g id1 id2 (x,y) -> if (y-x)<>0 then add_arc g id1 id2 (y-x) else g) g1 
 
 let filter_zeros gr = e_fold gr (fun g id1 id2 (x) -> if x<>0 then add_arc g id1 id2 x else g) (clone_nodes gr)
 (*create a tree with a flowgraph*)
 let init_tree gr s=
 
-  (* let add_child s_node l_arc g_acu = List.fold_left (fun g (x,y) -> if node_exists g x then g else new_arc (new_node g x) s_node x y) g_acu l_arc in *)
-
-  (* let add_child s_node (x,y) g = if node_exists g x then g else new_arc (new_node g x) s_node x y in *)
-
   let rec loop source g_acu node_acu=
     let l_outarc = out_arcs gr source in
-    (* List.fold_left (fun acu (x,y) -> loop x (add_child source l_outarc acu)) g_acu l_outarc  *)
     Printf.printf "%d" source;
     if node_exists node_acu source then g_acu else List.fold_left (fun g (x,y) ->if node_exists g x then g else loop x (new_arc (new_node g x) source x y) (new_node node_acu source)) g_acu l_outarc
   in
@@ -77,7 +49,25 @@ let rec add_flow graph s path value =
                      add_flow ( add_arc gr s id (-value)) id rest value )
   | [] -> graph
 
+let fulk graph source dest = 
 
+  let rec loop gr = 
+    let tree = init_tree gr source in 
+    let path =find_path tree source dest in
+    let add = filter_zeros (add_flow gr source path (min path)) in 
 
+    if node_exists tree dest then loop add else gr
 
+  in 
+  loop graph
+
+let capacity_graph init_graph flow_graph =
+  let flow s d =
+    match find_arc flow_graph s d with 
+    | Some x -> x 
+    | None -> 0 
+  in 
+  e_fold init_graph (fun g id1 id2 capacity -> new_arc g id1 id2 (flow id2 id1 ,capacity)) (clone_nodes init_graph) 
+
+  let string_of_int_tuple (x,y) = "\""^(string_of_int x)^"/"^(string_of_int y)^"\""
 

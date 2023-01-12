@@ -26,7 +26,7 @@ let () =
    let graph = from_file infile in
 
    (* Rewrite the graph that has been read. *)
-   (* let () = write_file outfile graph in *)
+   let () = write_file outfile graph in
 
    (* let graph2 = clone_nodes graph in *)
    (* let () = write_file outfile graph2 in *)
@@ -35,20 +35,21 @@ let () =
    (* let graph4 = add_arc graph3 4 2 10 in
       let graph5 = gmap graph4 (fun x -> string_of_int x) in *)
 
-   let graph6 = init_graph graph3 in
-   let flow_graph = create_flowgraph graph6 in
-   let tree = init_tree flow_graph 0 in 
-   let path =find_path tree 0 5 in
-   let () = List.iter (fun (a,b) -> Printf.printf "(%d,%d)" a b) (path) in
-   let flow_graph = add_flow flow_graph 0 path (min path) in 
+      (* let graph6 = init_graph graph3 in
+      let flow_graph = create_flowgraph graph6 in
+      let tree = init_tree flow_graph 0 in 
+      let path =find_path tree 0 5 in
+      let () = List.iter (fun (a,b) -> Printf.printf "(%d,%d)" a b) (path) in
+      let flow_graph = add_flow flow_graph 0 path (min path) in 
 
    let flow_graph = filter_zeros flow_graph in 
    let tree = init_tree flow_graph 0 in
    let path =find_path tree 0 5 in
    let flow_graph = add_flow flow_graph 0 path (min path) in
-   let flow_graph = filter_zeros flow_graph in 
-
-   let graph = gmap flow_graph (fun x -> string_of_int x) in
+   let flow_graph = filter_zeros flow_graph in  *)
+   let graph = fulk graph3 0 5 in 
+   let cap_graph = capacity_graph graph3 graph in 
+   let graph = gmap cap_graph (fun x -> string_of_int_tuple x) in
    let () = write_file outfile graph in
    let () = export graph "graphs/dotgraphoutputgwencador" in  
   ()
