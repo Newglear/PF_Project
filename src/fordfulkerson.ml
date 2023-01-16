@@ -12,7 +12,6 @@ let init_tree gr s=
 
   let rec loop source g_acu node_acu=
     let l_outarc = out_arcs gr source in
-    Printf.printf "%d" source;
   
     (* Process only the nodes if it's not on "node_acu" (works as a marked node list) *)
     (* if the node is already marked it does nothing else it creates a new arc to the out arcs and then process them *)

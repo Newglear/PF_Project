@@ -15,6 +15,7 @@ demo: build
 	@echo "\n==== RESULT ==== (content of outfile) \n"
 	@cat outfile
 	dot -Tsvg graphs/dotgraphoutputgwencador > graphs/dotgraphoutputgwencador.svg
+	geeqie graphs/dotgraphoutputgwencador.svg
 
 # dot: build
 # 	dot -Tsvg graphs/dotgraphoutputgwencador > graphs/dotgraphoutputgwencador.svg
